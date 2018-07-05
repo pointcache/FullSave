@@ -1,6 +1,9 @@
 # FullSave
 Easy to use system that saves whole gamestate.
 
+**tested on Windows**
+**tested with unity 2018.1.6f1**
+
 FullSave saves all gameObjects you need, with their transforms, and any components you inherit from **SavedComponent**.
 Currently saving runtime created (not from prefab) gameObjects is not supported, but its easy to implement.
 Conceptually any entity in game has to be described by a prefab, as its usually with most games.
@@ -8,7 +11,6 @@ Conceptually any entity in game has to be described by a prefab, as its usually 
 ![fs rocks](https://i.imgur.com/1UrL5Ij.png)
 
 
-**Created with unity 2018.1.6f1**
 
 This project relies on FullSerializer https://github.com/jacobdufault/fullserializer
 
