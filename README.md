@@ -2,6 +2,7 @@
 Easy to use system that saves whole gamestate.
 
 **tested on Windows**
+
 **tested with unity 2018.1.6f1**
 
 FullSave saves all gameObjects you need, with their transforms, and any components you inherit from **SavedComponent**.
