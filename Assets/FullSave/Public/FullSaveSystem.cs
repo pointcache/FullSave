@@ -20,8 +20,7 @@
 
         private Dictionary<string, GameObject> prefabsByGUID;
         private Dictionary<string, SavedScriptable> scriptablesByGUID;
-        private const string gosPath = "gameObjects.json";
-        private const string compsPath = "components.json";
+
         private fsSerializer serializer;
 
         private bool requestedSave { get; set; }
@@ -58,22 +57,26 @@
             }
         }
 
+
+        /// <summary>
+        /// Call this method to save whole scene into a file at specified path
+        /// </summary>
+        /// <param name="path"></param>
         public void Save(string path)
         {
             Save_Internal(path);
 
         }
-
+        /// <summary>
+        /// Call this method to load whole scene from a file at specified path
+        /// </summary>
+        /// <param name="path"></param>
         public void Load(string path)
         {
             Load_Internal(path);
         }
 
-        /// <summary>
-        /// Call this method to save whole scene into 2 files at specified path
-        /// current limitation - you need to provide a directory as a path ending with `/`
-        /// </summary>
-        /// <param name="path"></param>
+
         private void Save_Internal(string path)
         {
             SerializationData serializationdata = new SerializationData();
@@ -92,50 +95,44 @@
                 }
             }
 
-            if (!Directory.Exists(path))
+            string parent = Directory.GetParent(path).ToString();
+            if (!Directory.Exists(parent))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(parent);
             }
 
-
-            fsData data;
-
-            serializer.TrySerialize(serializationdata.gameObjects, out data);
-
-            using (var sw = new StreamWriter(path + gosPath))
+            using (var sw = new StreamWriter(path))
             {
-                sw.Write(fsJsonPrinter.PrettyJson(data));
-            }
+                fsData data;
 
-            data = null;
-            serializer.TrySerialize(serializationdata.components, out data);
+                serializer.TrySerialize(serializationdata.gameObjects, out data);
 
-            using (var sw = new StreamWriter(path + compsPath))
-            {
                 sw.Write(fsJsonPrinter.PrettyJson(data));
+                sw.WriteLine(sw.NewLine);
+                data = null;
+                serializer.TrySerialize(serializationdata.components, out data);
+
+
+                sw.Write(fsJsonPrinter.PrettyJson(data));
+
             }
 
         }
 
-        /// <summary>
-        /// Call this method to load whole scene from 2 files at specified path
-        /// current limitation - you need to provide a directory as a path ending with `/`
-        /// </summary>
-        /// <param name="path"></param>
+
         private void Load_Internal(string path)
         {
             string[] data = new string[2];
 
-            using (var sr = new StreamReader(path + gosPath))
+            using (var sr = new StreamReader(path))
             {
-                data[0] = sr.ReadToEnd();
-            }
+                string alldata = sr.ReadToEnd();
+                int breakIndex = alldata.IndexOf("]") + 1;
 
-            using (var sr = new StreamReader(path + compsPath))
-            {
-                data[1] = sr.ReadToEnd();
-            }
 
+                data[0] = alldata.Substring(0, breakIndex);
+                data[1] = alldata.Substring(breakIndex);
+            }
 
             SaveLoader.Load(data, this, serializer);
 
