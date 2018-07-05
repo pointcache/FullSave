@@ -87,3 +87,8 @@ from the menu.
 - Slow compared to other serializers, but the purpose is to have a Save/Load functionality for singleplayer games, where its not crucial.
 - Might not work on all platforms. FullSerializer is made to work everywhere, but i could on accident break something in AOT, tested 
 - Lacks unit tests.
+
+# Todo
+
+- Parenting support (data is already there, just needs an additional step on deserialization)
+- Runtime gameObject serialization
