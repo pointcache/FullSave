@@ -7,8 +7,7 @@ public class Player : SavedComponent
     private Weapon weapon;
     private new Collider2D collider;
 
-    [RuntimeSave, SerializeField]
-    private Transform testComponentReference;
+    [RuntimeSave, SerializeField] private Transform testComponentReference;
 
     private void Awake()
     {
